@@ -1,0 +1,17 @@
+n_epochs: 100
+batch_size: 32
+lr: 3.0e-4
+weight_decay: 1.0e-4
+warmup_ratio: 0.1     # FIX.md P1.3: longer warmup helps Mamba escape pred~0 basin
+use_amp: false        # Mamba fallback (pure-PyTorch) is unstable under fp16; only set true with official mamba-ssm CUDA kernels
+patience: 30          # FIX.md P1.3: more patience so phys-loss / Mamba can converge
+num_workers: 2
+
+# Default loss = pure NMSE (matches ChannelMamba & CPMamba).
+# Use 'combined' only for ablation A3 vs phys-loss.
+loss_type: nmse_only
+
+# Combined-loss weights (only used when loss_type=combined)
+alpha: 1.0
+beta: 0.1
+gamma: 0.05

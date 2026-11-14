@@ -1,0 +1,21 @@
+# ST-Mamba-specific recipe (FIX.md exp2).
+# The shared exp1.yaml recipe (lr=1e-3, two-stage, MSE warmup) traps the
+# pure-PyTorch Mamba fallback at pred=0. This recipe reverts to the settings
+# that previously got ST-Mamba OUT of the zero-basin (old full.yaml reached
+# -1.53 dB): lr=3e-4, cosine schedule, pure NMSE loss. Kept additions that are
+# safe + helpful: fixed-SNR data (data_fixed), 300 epochs, longer warmup,
+# high patience.
+n_epochs: 300
+batch_size: 32        # smaller batch -> more gradient steps; Mamba fallback likes this
+lr: 3.0e-4            # 1e-3 destabilizes the fallback; 3e-4 is the proven value
+weight_decay: 1.0e-4
+warmup_ratio: 0.1
+use_amp: false
+patience: 120
+num_workers: 0
+
+# Plain cosine annealing to 0 (NOT two-stage)
+lr_schedule: cosine
+
+# Pure NMSE -- MSE warmup gives near-zero gradient on normalized channels (|y|~0.085)
+loss_type: nmse_only

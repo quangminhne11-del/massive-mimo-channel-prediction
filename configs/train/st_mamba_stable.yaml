@@ -1,0 +1,25 @@
+# Stable training config for ST-Mamba (pure-PyTorch S6 fallback).
+#
+# Why this exists:
+#   The Mamba fallback uses exp(delta * A) inside a Python-side recurrent scan.
+#   Under AMP/FP16 the exp can overflow during the first few steps and the
+#   resulting nan/inf propagates through the scan, NaN-ing the loss from
+#   epoch 0. Two changes vs full.yaml fix this:
+#     - use_amp: false      -> keep the scan in FP32 (no FP16 overflow)
+#     - lr: 1.0e-4 (vs 3e-4) -> smaller updates early so internal activations
+#                              stay in a safe range until the model stabilizes
+#
+# Use this config ONLY for ST-Mamba. Baselines should stay on full.yaml.
+
+n_epochs: 100
+batch_size: 32
+lr: 1.0e-4
+weight_decay: 1.0e-4
+warmup_ratio: 0.05
+use_amp: false
+patience: 15
+num_workers: 2
+
+alpha: 1.0
+beta: 0.1
+gamma: 0.05

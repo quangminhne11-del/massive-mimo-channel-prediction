@@ -1,0 +1,2 @@
+# Optional: install in a PyTorch-compatible environment for data generation.
+sionna

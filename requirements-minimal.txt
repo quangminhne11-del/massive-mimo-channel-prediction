@@ -1,0 +1,8 @@
+# Direct dependencies for model training and the standard evaluation pipeline.
+# Install a PyTorch build appropriate for your CPU/CUDA platform.
+torch
+numpy
+PyYAML
+tqdm
+matplotlib
+tensorboard

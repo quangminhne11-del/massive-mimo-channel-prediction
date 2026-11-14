@@ -1,0 +1,36 @@
+# Long-sequence + high-mobility dataset (FIX.md exp3).
+#   - P=60 history (2x) so Mamba's linear-complexity temporal modeling has room
+#     to matter and longer Doppler context is available.
+#   - Wide velocity U[10,120] km/h for training; 12 discrete test velocities
+#     (10..120 step 10) to draw the NMSE-vs-velocity curve.
+#   - SNR fixed at 20 dB to isolate the velocity effect.
+seed: 42
+output_dir: data_long
+
+n_bs: 64
+n_rf: 8
+n_m: 4
+f_carrier_ghz: 30.0
+t_sample_ms: 0.625
+n_paths: 23
+
+p_frames: 60
+q_frames: 5
+l_frames: 10
+
+velocity_range_train: [10.0, 70.0]
+delay_spread_range: [25.0, 250.0]
+snr_range_train: [20.0, 20.0]
+
+n_train: 8000
+n_val: 1000
+
+# Test: discrete velocities (km/h) for the NMSE-vs-velocity curve.
+# Range capped at 70 km/h: wider ranges (e.g. up to 120) drag the ceiling down
+# to ~-1.5 dB for ALL models (the high-velocity samples are near-unpredictable
+# at the Q=5 horizon and dominate the average). 10-70 keeps prediction in the
+# meaningful regime where models reach -4..-7 dB and architectures separate.
+test_velocities: [10, 20, 30, 40, 50, 60, 70]
+test_delay_spread: 50.0
+test_snr: 20.0
+n_test_per_scenario: 300

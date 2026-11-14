@@ -1,0 +1,22 @@
+# PI-DAST -- physics-informed training (NMSE warmup -> + phase + temporal loss).
+# Dựa trên exp1 (CPMamba-style two-stage LR) nhưng đổi loss sang combined.
+n_epochs: 300
+batch_size: 64
+lr: 1.0e-3
+weight_decay: 1.0e-4
+warmup_ratio: 0.05
+use_amp: false
+patience: 120
+num_workers: 0
+
+lr_schedule: two_stage
+stage1_ratio: 0.6667
+stage2_lr_factor: 0.1
+
+# Physics-informed multi-loss. phase_warmup_epochs: chỉ NMSE trong N epoch đầu để
+# thoát đáy pred=0, rồi mới bật phase+temporal (PhaseLoss atan2 gây nhiễu lúc pred~0).
+loss_type: combined
+alpha: 1.0
+beta: 0.1
+gamma: 0.05
+phase_warmup_epochs: 15

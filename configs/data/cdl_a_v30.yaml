@@ -1,0 +1,20 @@
+seed: 42
+output_dir: data_v30
+n_bs: 64
+n_rf: 8
+n_m: 4
+f_carrier_ghz: 30.0
+t_sample_ms: 0.625
+n_paths: 23
+p_frames: 30
+q_frames: 5
+l_frames: 10
+velocity_range_train: [15.0, 45.0]
+delay_spread_range: [25.0, 250.0]
+snr_range_train: [20.0, 20.0]
+n_train: 6000
+n_val: 800
+test_velocities: [30]
+test_delay_spread: 50.0
+test_snr: 20.0
+n_test_per_scenario: 300

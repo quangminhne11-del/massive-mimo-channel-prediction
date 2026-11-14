@@ -1,0 +1,5 @@
+# Optional features: dashboard and extended evaluation reports.
+gradio
+tbparse
+thop
+Pillow

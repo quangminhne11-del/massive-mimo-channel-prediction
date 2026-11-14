@@ -1,0 +1,23 @@
+# FIX.md Experiment 1: CPMamba-style training recipe.
+#   - lr=1e-3 for the first 2/3 of training, drop to 1e-4 for the last 1/3
+#   - 300 epochs total
+#   - patience 50 (more time to escape NMSE pred=0 basin)
+#   - MSE warmup for the first 10 epochs, then switch to NMSE
+#   - use_amp false (Mamba fallback safety; harmless for other models)
+n_epochs: 300
+batch_size: 64        # bigger batch -> more stable gradient
+lr: 1.0e-3
+weight_decay: 1.0e-4
+warmup_ratio: 0.05
+use_amp: false
+patience: 120        # large enough to survive the stage 1 plateau and reach the stage 2 LR drop at epoch 200
+num_workers: 0       # load in main process; avoids spawning data-loader worker processes
+
+# Two-stage LR schedule (CPMamba): hold lr for 200 epochs, then 0.1x for 100 more
+lr_schedule: two_stage
+stage1_ratio: 0.6667
+stage2_lr_factor: 0.1
+
+# MSE warmup to break the NMSE zero-basin symmetry, then standard NMSE
+loss_type: mse_warmup
+mse_warmup_epochs: 10

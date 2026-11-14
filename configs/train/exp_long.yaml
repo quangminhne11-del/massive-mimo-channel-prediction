@@ -1,0 +1,15 @@
+# Recipe for the P=60 / wide-velocity (data_long) study.
+# Key change from exp1: NO MSE warmup. On normalized channels (|y|~0.1) the MSE
+# gradient near pred=0 is too weak to break symmetry, so an MSE warmup TRAPS the
+# model at pred=0 (verified: pure-MSE stuck at 0 dB, pure-NMSE escapes). NMSE
+# divides by ||y||^2, amplifying the escape gradient. So use pure NMSE here.
+n_epochs: 300
+batch_size: 64
+lr: 5.0e-4            # sweep on data_long: 5e-4 escapes pred=0 reliably; 1e-3 bounces & sticks, 2e-4 too slow
+weight_decay: 1.0e-4
+warmup_ratio: 0.02    # short warmup: long warmup keeps LR tiny during the critical symmetry-breaking window
+use_amp: false
+patience: 80          # wide-velocity U[10,120] escape is slow; give plenty of room
+num_workers: 0
+lr_schedule: cosine
+loss_type: nmse_only
